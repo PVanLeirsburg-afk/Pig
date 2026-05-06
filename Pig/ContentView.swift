@@ -27,11 +27,18 @@ struct ContentView: View {
                 CustomText(text: "Turn Score: \(turnScore)")
                 HStack {
                     Button("Roll") {
-                        
+                        chooseRandom(times: 3)
+                        withAnimation(.interpolatingSpring(stiffness: 10, damping: 2)) {
+                            rotation += 360
+                        }
                     }
                     .buttonStyle(CustomButtonStyle())
                     Button("Hold") {
-                        
+                        gameScore += turnScore
+                        endTurn()
+                        withAnimation(.easeInOut(duration: 1)) {
+                            rotation += 360
+                        }
                     }
                     .buttonStyle(CustomButtonStyle())
                 }
@@ -63,26 +70,28 @@ struct ContentView: View {
         }
     }
     
-
-struct CustomText: View {
-    let text: String
-    var body: some View {
-        Text(text).font(Font.custom("Marker Felt", size: 36))
+    struct CustomText: View {
+        let text: String
+        var body: some View {
+            Text(text).font(Font.custom("Marker Felt", size: 36))
+        }
     }
-}
-
-struct CustomButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .frame(width: 50)
-            .font(Font.custom("Marker Felt", size: 24))
-            .padding()
-            .background(.red).opacity(configuration.isPressed ? 0.0: 1.0)
-            .foregroundColor(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+    
+    struct CustomButtonStyle: ButtonStyle {
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .frame(width: 50)
+                .font(Font.custom("Marker Felt", size: 24))
+                .padding()
+                .background(.red).opacity(configuration.isPressed ? 0.0: 1.0)
+                .foregroundColor(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
     }
 }
 
 #Preview {
     ContentView()
 }
+
+   
